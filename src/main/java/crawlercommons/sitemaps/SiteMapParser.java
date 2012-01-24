@@ -50,8 +50,15 @@ public class SiteMapParser {
 
     /** Sitemap docs must be limited to 10MB (10,485,760 bytes) */
     public static int MAX_BYTES_ALLOWED = 10485760;
+    private boolean relaxBaseUrlRules = false;
 
-    public SiteMapParser() {}
+    public SiteMapParser() {
+        this(false);
+    }
+
+    public SiteMapParser(boolean relaxBaseUrlRules) {
+        this.relaxBaseUrlRules = relaxBaseUrlRules;
+    }
 
     /**
      * Returned a processed copy of an unprocessed sitemap object, i.e. transfer the value of 
@@ -458,6 +465,7 @@ public class SiteMapParser {
         NodeList list = doc.getElementsByTagName("channel");
         Element elem = (Element) list.item(0);
 
+
         // Treat publication date as last mod (Tue, 10 Jun 2003 04:00:00 GMT)
         String lastMod = getElementValue(elem, "pubDate");
 
@@ -537,11 +545,14 @@ public class SiteMapParser {
      * Both URLs are first converted to lowercase before the comparison is made
      * (this could be an issue on web servers that are case sensitive).
      * 
-     * @param sitemapUrl
+     * @param sitemapBaseUrl
      * @param testUrl
      * @return true if testUrl is under sitemapUrl, false otherwise
      */
     private boolean urlIsLegal(String sitemapBaseUrl, String testUrl) {
+
+        if (this.relaxBaseUrlRules)
+            return true;
 
         boolean ret = false;
 
