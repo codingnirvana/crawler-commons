@@ -17,21 +17,20 @@
 
 package crawlercommons.robots;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 public class SimpleRobotRulesParserTest {
     private static final String LF = "\n";
@@ -707,6 +706,17 @@ public class SimpleRobotRulesParserTest {
     }
 
     @Test
+    public void testParseSiteMapsWithMixedCase() throws Exception {
+        SimpleRobotRulesParser robotParser = new SimpleRobotRulesParser();
+        BaseRobotRules baseRobotRules = robotParser.parseContent(FAKE_ROBOTS_URL, readFile("/robots/flipkart-robots.txt"),
+                "text/plain", "foobot");
+
+        List<String> sitemaps = baseRobotRules.getSitemaps();
+        assertThat(sitemaps.size(),  is(16));
+        assertThat(sitemaps.get(0), is("http://www.flipkart.com/sitemap/sitemapMOB_index.xml"));
+    }
+
+    @Test
     public void testManyUserAgents() throws Exception {
         BaseRobotRules rules = createRobotRules("wget", readFile("/robots/many-user-agents.txt"));
         assertFalse("many-user-agents", rules.isAllowed("http://domain.com/"));
@@ -715,7 +725,7 @@ public class SimpleRobotRulesParserTest {
         assertTrue("many-user-agents", rules.isAllowed("http://domain.com/"));
         assertFalse("many-user-agents", rules.isAllowed("http://domain.com/bot-trap/"));
     }
-    
+
     private byte[] readFile(String filename) throws Exception {
         byte[] bigBuffer = new byte[100000];
         InputStream is = SimpleRobotRulesParserTest.class.getResourceAsStream(filename);

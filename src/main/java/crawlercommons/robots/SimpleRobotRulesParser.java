@@ -222,12 +222,12 @@ public class SimpleRobotRulesParser extends BaseRobotsParser {
      * @param line
      * @return robot command found on line
      */
-    private static RobotToken tokenize(String line) {
+    private static RobotToken tokenize(String line, String originalCaseLine) {
         for (String prefix : DIRECTIVE_PREFIX.keySet()) {
             int prefixLength = prefix.length();
-            if (line.startsWith(prefix)) {
+            if (originalCaseLine.toLowerCase().startsWith(prefix)) {
                 RobotDirective directive = DIRECTIVE_PREFIX.get(prefix);
-                String dataPortion = line.substring(prefixLength);
+                String dataPortion = originalCaseLine.substring(prefixLength);
 
                 if (directive.isPrefix()) {
                     Matcher m = DIRECTIVE_SUFFIX_PATTERN.matcher(dataPortion);
@@ -366,12 +366,13 @@ public class SimpleRobotRulesParser extends BaseRobotsParser {
                 line = line.substring(0, hashPos);
             }
             
+            String originalCaseLine = line;
             line = line.trim().toLowerCase();
             if (line.length() == 0) {
                 continue;
             }
          
-            RobotToken token = tokenize(line);
+            RobotToken token = tokenize(line, originalCaseLine);
             switch (token.getDirective()) {
                 case USER_AGENT:
                     keepGoing = handleUserAgent(parseState, token);
@@ -477,7 +478,7 @@ public class SimpleRobotRulesParser extends BaseRobotsParser {
                 state.setAddingRules(true);
             } else {
                 for (String targetName : targetNames) {
-                    if (targetName.startsWith(agentName)) {
+                    if (targetName.toLowerCase().startsWith(agentName.toLowerCase())) {
                         state.setMatchedRealName(true);
                         state.setAddingRules(true);
                         state.clearRules();     // In case we previously hit a wildcard rule match

@@ -1,0 +1,93 @@
+User-agent: Mediapartners-Google
+Disallow:
+
+User-agent: Adsbot-Google
+Disallow:
+
+User-agent: Googlebot-Image
+Disallow:
+
+User-agent:  *
+Disallow: /search-all
+Disallow: /search-all/
+Disallow: /search-book
+Disallow: /search-book/
+Disallow: /search-books
+Disallow: /search-books/
+Disallow: /search-movie
+Disallow: /search-movie/
+Disallow: /search-movies
+Disallow: /search-movies/
+Disallow: /search-music
+Disallow: /search-music/
+Disallow: /search-musics
+Disallow: /search-musics/
+Disallow: /search-game
+Disallow: /search-game/
+Disallow: /search-games
+Disallow: /search-games/
+Disallow: /search-software
+Disallow: /search-software/
+Disallow: /search-softwares
+Disallow: /search-softwares/
+Disallow: /search-mobile
+Disallow: /search-mobile/
+Disallow: /search-mobiles
+Disallow: /search-mobiles/
+Disallow: /search-accessory
+Disallow: /search-accessory/
+Disallow: /search-accessories
+Disallow: /search-accessories/
+Disallow: /search-gamingconsole
+Disallow: /search-gamingconsole/
+Disallow: /search-gamingconsoles
+Disallow: /search-gamingconsoles/
+Disallow: /search-camera
+Disallow: /search-camera/
+Disallow: /search-cameras
+Disallow: /search-cameras/
+Disallow: /search-computers
+Disallow: /search-computers/
+Disallow: /search-computer
+Disallow: /search-computer/
+Disallow: /search-audioplayer/
+Disallow: /search-audioplayers/
+Disallow: /search/
+
+Disallow: /browse-
+Disallow: /browsecategory-
+Disallow: /browse/
+
+Disallow: /search.php
+
+Disallow: /m/
+Disallow: /acart
+Disallow: /ol
+Disallow: /writereview
+Disallow: /author/game-console/
+Disallow: /author/game-console
+Disallow: /trackorder
+Disallow: /order_details
+Disallow: /dynamic/
+Disallow: /cg/
+Disallow: /sms/callback/
+
+
+
+Sitemap: http://www.flipkart.com/sitemap/sitemapMOB_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMOBL_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMOV_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMOVL_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMUS_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMUSL_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapGAM_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapGAML_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMA_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapMAL_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapGC_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapGCL_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapCAM_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapCAML_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapCOMP_index.xml
+Sitemap: http://www.flipkart.com/sitemap/sitemapCOMPL_index.xml
+

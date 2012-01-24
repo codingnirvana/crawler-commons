@@ -101,7 +101,7 @@ public class SimpleRobotRules extends BaseRobotRules {
             }
 
             for (RobotRule rule : _rules) {
-                if (path.startsWith(rule._prefix)) {
+                if (path.toLowerCase().startsWith(rule._prefix.toLowerCase())) {
                     return rule._allow;
                 }
             }
