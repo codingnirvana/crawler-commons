@@ -8,7 +8,7 @@
 	<name>Crawler-commons</name>
 	<packaging>jar</packaging>
 	<!-- Must be kept in sync with "version" value in build.properties -->
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2.1-SNAPSHOT</version>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -41,6 +41,21 @@
 			<email>jnioche@apache.org</email>
 		</developer>
 	</developers>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+                <version>2.3.2</version>
+            </plugin>
+        </plugins>
+    </build>
+
 
 
 	<dependencies>
@@ -96,15 +111,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Eclipse project generation dependencies -->
-
-		<dependency>
-			<groupId>ant-eclipse</groupId>
-			<artifactId>ant-eclipse-jvm1.2</artifactId>
-			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
 
