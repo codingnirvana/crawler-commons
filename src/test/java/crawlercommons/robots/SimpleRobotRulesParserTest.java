@@ -17,14 +17,13 @@
 
 package crawlercommons.robots;
 
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import crawlercommons.test.TestUtils;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -641,7 +640,7 @@ public class SimpleRobotRulesParserTest {
     
     @Test
     public void testRobotsWithBOM() throws Exception {
-        BaseRobotRules rules = createRobotRules("foobot", readFile("/robots/robots-with-bom.txt"));
+        BaseRobotRules rules = createRobotRules("foobot", TestUtils.readFile("/robots/robots-with-bom.txt"));
         assertFalse("Disallow match against *", rules.isAllowed("http://www.domain.com/profile"));
     }
     
@@ -657,36 +656,36 @@ public class SimpleRobotRulesParserTest {
     
     @Test
     public void testIgnoringHost() throws Exception {
-        BaseRobotRules rules = createRobotRules("foobot", readFile("/robots/www.flot.com-robots.txt"));
+        BaseRobotRules rules = createRobotRules("foobot", TestUtils.readFile("/robots/www.flot.com-robots.txt"));
         assertFalse("Disallow img directory", rules.isAllowed("http://www.flot.com/img/"));
     }
     
     @Test
     public void testDirectiveTypos() throws Exception {
-        BaseRobotRules rules = createRobotRules("bot1", readFile("/robots/directive-typos-robots.txt"));
+        BaseRobotRules rules = createRobotRules("bot1", TestUtils.readFile("/robots/directive-typos-robots.txt"));
         assertFalse("desallow", rules.isAllowed("http://domain.com/desallow/"));
         assertFalse("dissalow", rules.isAllowed("http://domain.com/dissalow/"));
         
-        rules = createRobotRules("bot2", readFile("/robots/directive-typos-robots.txt"));
+        rules = createRobotRules("bot2", TestUtils.readFile("/robots/directive-typos-robots.txt"));
         assertFalse("useragent", rules.isAllowed("http://domain.com/useragent/"));
         
-        rules = createRobotRules("bot3", readFile("/robots/directive-typos-robots.txt"));
+        rules = createRobotRules("bot3", TestUtils.readFile("/robots/directive-typos-robots.txt"));
         assertFalse("useg-agent", rules.isAllowed("http://domain.com/useg-agent/"));
         
-        rules = createRobotRules("bot4", readFile("/robots/directive-typos-robots.txt"));
+        rules = createRobotRules("bot4", TestUtils.readFile("/robots/directive-typos-robots.txt"));
         assertFalse("useragent-no-colon", rules.isAllowed("http://domain.com/useragent-no-colon/"));
     }
     
     @Test
     public void testFormatErrors() throws Exception {
-        BaseRobotRules rules = createRobotRules("bot1", readFile("/robots/format-errors-robots.txt"));
+        BaseRobotRules rules = createRobotRules("bot1", TestUtils.readFile("/robots/format-errors-robots.txt"));
         assertFalse("whitespace-before-colon", rules.isAllowed("http://domain.com/whitespace-before-colon/"));
         assertFalse("no-colon", rules.isAllowed("http://domain.com/no-colon/"));
         
-        rules = createRobotRules("bot2", readFile("/robots/format-errors-robots.txt"));
+        rules = createRobotRules("bot2", TestUtils.readFile("/robots/format-errors-robots.txt"));
         assertFalse("no-colon-useragent", rules.isAllowed("http://domain.com/no-colon-useragent/"));
         
-        rules = createRobotRules("bot3", readFile("/robots/format-errors-robots.txt"));
+        rules = createRobotRules("bot3", TestUtils.readFile("/robots/format-errors-robots.txt"));
         assertTrue("whitespace-before-colon", rules.isAllowed("http://domain.com/whitespace-before-colon/"));
     }
     
@@ -694,21 +693,21 @@ public class SimpleRobotRulesParserTest {
     @Test
     public void testExtendedStandard() throws Exception {
         SimpleRobotRulesParser robotParser = new SimpleRobotRulesParser();
-        robotParser.parseContent(FAKE_ROBOTS_URL, readFile("/robots/extended-standard-robots.txt"), 
+        robotParser.parseContent(FAKE_ROBOTS_URL, TestUtils.readFile("/robots/extended-standard-robots.txt"),
                         "text/plain", "foobot");
         assertEquals("Zero warnings with expended directives", 0, robotParser.getNumWarnings());
     }
     
     @Test
     public void testSitemap() throws Exception {
-        BaseRobotRules rules = createRobotRules("bot1", readFile("/robots/sitemap-robots.txt"));
+        BaseRobotRules rules = createRobotRules("bot1", TestUtils.readFile("/robots/sitemap-robots.txt"));
         assertEquals("Found sitemap", 2, rules.getSitemaps().size());
     }
 
     @Test
     public void testParseSiteMapsWithMixedCase() throws Exception {
         SimpleRobotRulesParser robotParser = new SimpleRobotRulesParser();
-        BaseRobotRules baseRobotRules = robotParser.parseContent(FAKE_ROBOTS_URL, readFile("/robots/flipkart-robots.txt"),
+        BaseRobotRules baseRobotRules = robotParser.parseContent(FAKE_ROBOTS_URL, TestUtils.readFile("/robots/flipkart-robots.txt"),
                 "text/plain", "foobot");
 
         List<String> sitemaps = baseRobotRules.getSitemaps();
@@ -718,18 +717,12 @@ public class SimpleRobotRulesParserTest {
 
     @Test
     public void testManyUserAgents() throws Exception {
-        BaseRobotRules rules = createRobotRules("wget", readFile("/robots/many-user-agents.txt"));
+        BaseRobotRules rules = createRobotRules("wget", TestUtils.readFile("/robots/many-user-agents.txt"));
         assertFalse("many-user-agents", rules.isAllowed("http://domain.com/"));
         
-        rules = createRobotRules("mysuperlongbotnamethatmatchesnothing", readFile("/robots/many-user-agents.txt"));
+        rules = createRobotRules("mysuperlongbotnamethatmatchesnothing", TestUtils.readFile("/robots/many-user-agents.txt"));
         assertTrue("many-user-agents", rules.isAllowed("http://domain.com/"));
         assertFalse("many-user-agents", rules.isAllowed("http://domain.com/bot-trap/"));
     }
 
-    private byte[] readFile(String filename) throws Exception {
-        byte[] bigBuffer = new byte[100000];
-        InputStream is = SimpleRobotRulesParserTest.class.getResourceAsStream(filename);
-        int len = is.read(bigBuffer);
-        return Arrays.copyOf(bigBuffer, len);
-    }
 }

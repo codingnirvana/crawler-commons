@@ -18,12 +18,23 @@
 package crawlercommons.test;
 
 import crawlercommons.fetcher.http.UserAgent;
+import crawlercommons.robots.SimpleRobotRulesParserTest;
 import org.junit.Test;
+
+import java.io.InputStream;
+import java.util.Arrays;
 
 public class TestUtils {
     
     // User agent for when we're not doing external fetching, so we just need a fake name.
     public static final UserAgent CC_TEST_AGENT = new UserAgent("test", "test@domain.com", "http://test.domain.com");
+
+    public static byte[] readFile(String filename) throws Exception {
+        byte[] bigBuffer = new byte[100000];
+        InputStream is = SimpleRobotRulesParserTest.class.getResourceAsStream(filename);
+        int len = is.read(bigBuffer);
+        return Arrays.copyOf(bigBuffer, len);
+    }
 
     @Test
     public void testForMaven() {

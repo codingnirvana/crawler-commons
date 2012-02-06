@@ -29,6 +29,7 @@ import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.tika.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -38,7 +39,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import crawlercommons.sitemaps.AbstractSiteMap.SitemapType;
-
 
 
 public class SiteMapParser {
@@ -193,7 +193,10 @@ public class SiteMapParser {
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            doc = dbf.newDocumentBuilder().parse(is);
+            byte[] bytes = (is.getByteStream() == null) ? IOUtils.toByteArray(is.getCharacterStream()) : IOUtils.toByteArray(is.getByteStream());
+            String s = new String(bytes).trim();
+            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(s.getBytes());
+            doc = dbf.newDocumentBuilder().parse(byteInputStream);
         } catch (Exception e) {
             throw new UnknownFormatException("Error parsing XML for " + sitemapUrl);
         }

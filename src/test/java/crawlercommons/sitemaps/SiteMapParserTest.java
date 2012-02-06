@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import crawlercommons.test.TestUtils;
 import junit.framework.TestCase;
 
 import org.junit.After;
@@ -81,6 +82,40 @@ public class SiteMapParserTest extends TestCase {
         SiteMap sm = (SiteMap) asm;
         assertEquals(5, sm.getSiteMapUrls().size());
     }
+
+    public void testSitemapXMLWithLeadingWhitespaces() throws IOException, UnknownFormatException {
+        SiteMapParser parser = new SiteMapParser();
+        String contentType = "text/xml";
+
+        String scontent = "               <?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" + "  <url>" + "<loc>http://www.example.com/</loc>"
+                + "<lastmod>2005-01-01</lastmod>" + "<changefreq>monthly</changefreq>" + "<priority>0.8</priority>" + "</url>" + "<url>"
+                + "<loc>http://www.example.com/catalog?item=12&amp;desc=vacation_hawaii</loc>" + "<changefreq>weekly</changefreq>" + "</url>" + "<url>"
+                + "<loc>http://www.example.com/catalog?item=73&amp;desc=vacation_new_zealand</loc>" + "<lastmod>2004-12-23</lastmod>" + "<changefreq>weekly</changefreq>" + "</url>" + "<url>"
+                + "<loc>http://www.example.com/catalog?item=74&amp;desc=vacation_newfoundland</loc>" + "<lastmod>2004-12-23T18:00:15+00:00</lastmod>" + "<priority>0.3</priority>" + "</url>"
+                + "<url>" + "<loc>http://www.example.com/catalog?item=83&amp;desc=vacation_usa</loc>" + "<lastmod>2004-11-23</lastmod>" + "</url>" + "</urlset>";
+
+        byte[] content = scontent.getBytes();
+        URL url = new URL("http://www.example.com/sitemap.xml");
+        AbstractSiteMap asm = parser.parseSiteMap(contentType, content, url);
+        assertEquals(false, asm.isIndex());
+        assertEquals(true, asm instanceof SiteMap);
+        SiteMap sm = (SiteMap) asm;
+        assertEquals(5, sm.getSiteMapUrls().size());
+    }
+
+    public void testSitemapXMLWithLeadingWhitespacesInGzip() throws Exception, UnknownFormatException {
+        SiteMapParser parser = new SiteMapParser(true);
+        String contentType = "application/gzip";
+
+        byte[] content = TestUtils.readFile("/sitemaps/detail23.xml.gz");
+        URL url = new URL("http://www.example.com/detail23.xml.gz");
+        AbstractSiteMap asm = parser.parseSiteMap(contentType, content, url);
+        assertEquals(false, asm.isIndex());
+        assertEquals(true, asm instanceof SiteMap);
+        SiteMap sm = (SiteMap) asm;
+        assertEquals(20000, sm.getSiteMapUrls().size());
+    }
+
 
     public void testSitemapTXT() throws UnknownFormatException, IOException {
         SiteMapParser parser = new SiteMapParser();
